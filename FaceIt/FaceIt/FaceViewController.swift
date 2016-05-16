@@ -23,8 +23,37 @@ class FaceViewController: UIViewController {
     var expression = FacialExpression(eyes: .Open , eyeBrows: .Relaxed , mouth: .Smirk) { didSet { updateUI() } }
 
     
-    @IBOutlet weak var faceView: FaceView! { didSet { updateUI() } }
+    @IBOutlet weak var faceView: FaceView! {
+        
+        didSet {
+            faceView.addGestureRecognizer(UIPinchGestureRecognizer(
+                target: faceView, action: #selector(FaceView.changeScale(_:))
+                ))
+            
+            let happierSwipeGestureRecognizer = UISwipeGestureRecognizer(
+                target: self, action: #selector(FaceViewController.increaseHappiness)
+            )
+            happierSwipeGestureRecognizer.direction = .Up
+            faceView.addGestureRecognizer(happierSwipeGestureRecognizer)
+            
+            
+            let sadderSwipeGestureRecognizer = UISwipeGestureRecognizer(
+                target: self, action: #selector(FaceViewController.decreaseHappiness)
+            )
+            sadderSwipeGestureRecognizer.direction = .Down
+            faceView.addGestureRecognizer(sadderSwipeGestureRecognizer)
+
+            updateUI()
+        }
+    }
     
+    func increaseHappiness() {
+        expression.mouth = expression.mouth.happierMouth()
+    }
+    
+    func decreaseHappiness() {
+        expression.mouth = expression.mouth.sadderMouth()
+    }
     private var mouthCurvatures = [FacialExpression.Mouth.Frown : -1.0 ,
                                    .Smirk: -0.5 ,
                                    .Neutral: 0.0 ,
@@ -44,6 +73,15 @@ class FaceViewController: UIViewController {
         }
         faceView.mouthCurvature = mouthCurvatures[expression.mouth] ?? 0.0
         faceView.eyeBrowTilt = eyeBroeTilt[expression.eyeBrows] ?? 0.0
+    }
+    @IBAction func toggleEyes(recognizer: UITapGestureRecognizer) {
+        if recognizer.state == .Ended {     //If tap ended
+            switch expression.eyes {
+            case .Open: expression.eyes = .Closed
+            case .Closed : expression.eyes = .Open
+            case .Squinting: break
+            }
+        }
     }
 }
 

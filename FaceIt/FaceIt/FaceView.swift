@@ -151,4 +151,17 @@ class FaceView: UIView {
         pathForBrow(.Left).stroke()
         pathForBrow(.Right).stroke()
     }
+   
+    func changeScale(recognizer: UIPinchGestureRecognizer) {
+        switch recognizer.state {
+        case .Changed , .Ended:
+                scale *= recognizer.scale
+                recognizer.scale = 1
+        default:
+            break
+        }
+    } 
+    
+    
+    
 }
