@@ -66,13 +66,15 @@ class FaceViewController: UIViewController {
                                 .Normal:0.0]
     
     private func updateUI() {
-        switch expression.eyes {
-        case .Open:      faceView.eyeOpen = true
-        case .Closed:    faceView.eyeOpen = false
-        case .Squinting: faceView.eyeOpen = false
-        }
+        if faceView != nil {
+            switch expression.eyes {
+            case .Open:      faceView.eyeOpen = true
+            case .Closed:    faceView.eyeOpen = false
+            case .Squinting: faceView.eyeOpen = false
+            }
         faceView.mouthCurvature = mouthCurvatures[expression.mouth] ?? 0.0
         faceView.eyeBrowTilt = eyeBroeTilt[expression.eyeBrows] ?? 0.0
+        }
     }
     @IBAction func toggleEyes(recognizer: UITapGestureRecognizer) {
         if recognizer.state == .Ended {     //If tap ended
