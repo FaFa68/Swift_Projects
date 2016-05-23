@@ -19,7 +19,9 @@ class CalCulatorBrain {
         case BinaryOperation((Double , Double) -> Double)
         case Equal
     }
-    
+    func addUnaryOperation(symbol: String ,operation: (Double)-> Double) {
+        operations[symbol] = Operation.UnaryOperation(operation)
+    }
     var operations : Dictionary<String,Operation> = [
         "Π"   : Operation.Constant(M_PI),
         "e"   : Operation.Constant(M_E),
@@ -90,7 +92,7 @@ class CalCulatorBrain {
                        performOperation(opertion)
                     }
                 }
-            }
+            }           
         }
     }
     func clear() {

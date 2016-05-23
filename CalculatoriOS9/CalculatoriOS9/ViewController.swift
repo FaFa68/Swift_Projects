@@ -9,12 +9,25 @@
 import UIKit
 
 class ViewController: UIViewController {
-
+ 
+    var calculatorCount : Int = 0
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
+        calculatorCount += 1
+        print("Loaded up a new Calculator (count = \(calculatorCount))")
+        brain.addUnaryOperation("redSqrt"){ [weak weakSelf = self ] in
+            weakSelf?.label.textColor = UIColor.redColor()
+            return (sqrt($0))
+        }
     }
-
+    
+    deinit{
+        calculatorCount -= 1
+        print("Calculator left the heap (count \(calculatorCount))")
+    }
+    
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
